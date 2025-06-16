@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+<h2>Задача</h2>
+
+<ul>
+    {% for task in my_tasks %}
+    <li>
+        <a href="{{ url_for('tasks.get_task', task_id = task.id) }}">
+            {{ task.title }}
+        </a>
+        <form action="{{ url_for('tasks.delete_task', task_id = task.id) }}" method="post">
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+<a href="{{ url_for('tasks.add_task') }}">Add new task</a>
+{% endblock %}
