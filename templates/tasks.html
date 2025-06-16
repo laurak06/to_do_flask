@@ -17,9 +17,16 @@
 <ul>
     {% for task in my_tasks %}
     <li>
-        <a href="{{ url_for('tasks.get_task', task_id = task.id) }}">
-            {{ task.title }}
+        <a href="{{ url_for('tasks.get_task', task_id=task.id) }}">
+            {{ task.title }} — <strong>{{ task.status }}</strong>
         </a>
+        
+        {% if task.status != 'выполнено' %}
+        <form action="{{ url_for('tasks.complete_task', task_id=task.id) }}" method="post" style="display:inline;">
+            <button type="submit">Завершить</button>
+        </form>
+        {% endif %}
+        
         <form action="{{ url_for('tasks.delete_task', task_id = task.id) }}" method="post">
             <button type="submit">Delete</button>
         </form>

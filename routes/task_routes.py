@@ -7,6 +7,11 @@ tasks_bp = Blueprint('tasks', __name__)
 
 @tasks_bp.route('/')
 def get_all_tasks():
+    filtration = request.args.get('filtration')
+    if filtration:
+        tasks = Task.query.filter_by(status='в процессе').all()
+        return render_template('tasks.html', my_tasks=tasks)
+
     tasks = Task.query.all()
     return render_template('tasks.html', my_tasks=tasks)
 
@@ -39,10 +44,10 @@ def delete_task(task_id):
     return redirect(url_for('tasks.get_all_tasks'))
 
 
-@tasks_bp.route('/update_status/<int:task_id>', methods=['POST'])
+@tasks_bp.route('/complite/<int:task_id>', methods=['POST'])
 def update_status(task_id):
     task = Task.query.get_or_404(task_id)
     task.status = 'Завершено'
     db.session.commit()
-    flash('Status has been updated')
+    flash('Status has been completed')
     return redirect(url_for('tasks.get_all_tasks'))
