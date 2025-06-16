@@ -1,3 +1,5 @@
+from datetime import datetime as dt
+
 from flask import Blueprint, render_template, flash, redirect, request, url_for
 from database.engine import db
 from database.models import Task
@@ -21,7 +23,8 @@ def add_task():
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
-        new_task = Task(title=title, description=description)
+        created_at = dt.now().strftime('"%d.%m.%Y %H:%M:%S"')
+        new_task = Task(title=title, description=description, created_at=created_at)
         db.session.add(new_task)
         db.session.commit()
         flash('Задача добавлена!')
